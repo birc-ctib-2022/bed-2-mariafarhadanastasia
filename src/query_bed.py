@@ -25,9 +25,6 @@ def extract_region(features: list[BedLine],
         output.extend(features[low_bound:up_bound])
     return output
 
-    
-
-
 
 
 def main() -> None:

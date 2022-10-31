@@ -49,6 +49,7 @@ def lower_bound(x: list[int], v: int) -> int:
     last = len(x) - 1
     return search(x, v, first, last)
 
+
 def upper_bound(x: list[int], v: int) -> int:
     """Get the index of the upper bound of v in x.
 

@@ -14,7 +14,7 @@ def lower_bound(x: list[int], v: int) -> int:
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 0)
     0
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 1)
-    0
+    1
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 2)
     2
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 3)
@@ -24,7 +24,7 @@ def lower_bound(x: list[int], v: int) -> int:
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 5)
     7
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 6)
-    8
+    7
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 7)
     8
     """
@@ -56,15 +56,15 @@ def upper_bound(x: list[int], v: int) -> int:
     If all values in x are smaller than v, return len(x).
 
     >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 0)
-    0
-    >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 1)
     1
+    >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 1)
+    2
     >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 2)
-    3
-    >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 3)
     4
+    >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 3)
+    5
     >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 4)
-    6
+    7
     >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 5)
     7
     >>> upper_bound([0, 1, 2, 2, 3, 4, 4, 6], 6)

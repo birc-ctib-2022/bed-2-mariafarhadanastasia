@@ -5,18 +5,53 @@ import argparse  # we use this module for option parsing. See main for details.
 import sys
 from typing import TextIO
 from bed import (
-    read_bed_file, print_line, Table
+    BedLine, read_bed_file, print_line, Table
 )
 
 
 def sort_file(table: Table) -> None:
     """Sort each chromosome and update the table."""
+    i = 0
     for chrom, features in table.items():
         # Here we iterate through all the chromosomes in the file.
         # You need to sort `features` with respect to chrom_start
-        # and then updatte the table
+        # and then update the table
         # FIXME: sort `features`
-        table[chrom] = features  # features should be sorted here
+        table[chrom] = sort_feature(features)  # features should be sorted here
+
+
+def merge(left: list[BedLine], right: list[BedLine]) -> list[BedLine]:
+    i, j = 0, 0
+    out = []
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            out.append(left[i])
+            i += 1
+        else:
+            out.append(right[j])
+            j += 1
+
+    out += left[i:]
+    out += right[j:]
+
+    return out
+
+
+def merge_sort(features: list[BedLine]) -> list[BedLine]:
+    if len(features) < 2:
+        return features
+
+    mid = len(features) // 2
+
+    return merge(
+        left = merge_sort(features[:mid]),
+        right = merge_sort(features[mid:])
+    )
+
+
+def sort_feature(features: list[BedLine]) -> list[BedLine]:
+    return merge_sort(features)
 
 
 def print_file(table: Table, outfile: TextIO) -> None:

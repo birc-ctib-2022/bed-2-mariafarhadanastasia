@@ -13,7 +13,7 @@ from bounds import upper_bound
 def extract_region(features: list[BedLine],
                    start: int, end: int) -> list[BedLine]:
     """Extract region chrom[start:end] and write it to outfile.
-     >>> extract_region([chrom0	905	979\n chrom3	249	715], [chrom0 900 1000])
+     >>> extract_region([chrom0	905	979\n chrom3 249 715], [chrom0 900 1000])
      chrom0	905	979
     """
     chr_list=[]

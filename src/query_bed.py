@@ -12,16 +12,17 @@ from bounds import upper_bound
 
 def extract_region(features: list[BedLine],
                    start: int, end: int) -> list[BedLine]:
-    """Extract region chrom[start:end] and write it to outfile."""
-    chr_start=[]
-    chr_end=[]
+    """Extract region chrom[start:end] and write it to outfile.
+     >>> extract_region([chrom0	905	979\n chrom3 249 715], [chrom0 900 1000])
+     chrom0	905	979
+    """
+    chr_list=[]
     output=[]
     for BedLine in features:
-        chr_start.append(BedLine.chrom_start)
-        chr_end.append(BedLine.chrom_end)
+        chr_list.append(BedLine.chrom_start)
     for i in range(start,end):
-        low_bound=lower_bound(chr_start, i)
-        up_bound=upper_bound(chr_end,i)
+        low_bound=lower_bound(chr_list, i)
+        up_bound=upper_bound(chr_list,i)
         output.extend(features[low_bound:up_bound])
     return output
 

@@ -41,7 +41,7 @@ def lower_bound(x: list[int], v: int) -> int:
                 if arr[mid - 1] < v:
                     return mid
                 else:
-                    return search(arr, v, first, mid) 
+                    return search(arr, v, first, mid - 1) 
             else:
                 return search(arr, v, mid + 1, last)
 

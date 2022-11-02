@@ -30,8 +30,5 @@ def test_extract_region():
     #asserts that query outside of the range in the feature file is == []
     assert extract_region(input3, 1000, 7000)==[]
 
-    
-
-
 
     

@@ -1,6 +1,7 @@
 """Tool for cleaning up a BED file."""
 
-import argparse  # we use this module for option parsing. See main for details.
+import argparse
+from ast import iter_fields  # we use this module for option parsing. See main for details.
 
 import sys
 from bed import (
@@ -13,18 +14,18 @@ from bounds import upper_bound
 def extract_region(features: list[BedLine],
                    start: int, end: int) -> list[BedLine]:
     """Extract region chrom[start:end] and write it to outfile.
-     >>> extract_region([chrom0	905	979\n chrom3 249 715], [chrom0 900 1000])
-     chrom0	905	979
     """
     chr_list=[]
     output=[]
+    if features==[]:
+        return []
     for BedLine in features:
         chr_list.append(BedLine.chrom_start)
-    for i in range(start,end):
-        low_bound=lower_bound(chr_list, i)
-        up_bound=upper_bound(chr_list,i)
-        output.extend(features[low_bound:up_bound])
+    low_bound=lower_bound(chr_list, start)
+    up_bound=upper_bound(chr_list,end)
+    output.extend(features[low_bound:up_bound])
     return output
+
 
 
 
@@ -60,3 +61,6 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
+
+

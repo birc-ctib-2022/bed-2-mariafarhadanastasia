@@ -3,15 +3,17 @@
 import argparse  # we use this module for option parsing. See main for details.
 
 import sys
-from typing import TextIO
+from typing import TextIO, TypeVar
 from bed import (
     BedLine, read_bed_file, print_line, Table
 )
 
 
+T = TypeVar('T')
+
+
 def sort_file(table: Table) -> None:
     """Sort each chromosome and update the table."""
-    i = 0
     for chrom, features in table.items():
         # Here we iterate through all the chromosomes in the file.
         # You need to sort `features` with respect to chrom_start
@@ -20,7 +22,15 @@ def sort_file(table: Table) -> None:
         table[chrom] = sort_feature(features)  # features should be sorted here
 
 
-def merge(left: list[BedLine], right: list[BedLine]) -> list[BedLine]:
+def merge(left: list[T], right: list[T]) -> list[T]:
+    """
+    This function will merge two lists.
+
+    >>> merge([3], [2])
+    [2, 3]
+    >>> merge([9, 8, 7], [5, 4, 3, 2, 1])
+    [5, 4, 3, 2, 1, 9, 8, 7]
+    """
     i, j = 0, 0
     out = []
 
@@ -38,7 +48,17 @@ def merge(left: list[BedLine], right: list[BedLine]) -> list[BedLine]:
     return out
 
 
-def merge_sort(features: list[BedLine]) -> list[BedLine]:
+def merge_sort(features: list[T]) -> list[T]:
+    """
+    This function will sort a list utilizing merge function.
+
+    >>> merge_sort([5, 4, 3, 2, 1])
+    [1, 2, 3, 4, 5]
+    >>> merge_sort([9, 8])
+    [8, 9]
+    >>> merge_sort([5, 4, 10, 2, 1, 9, 6, 8, 3, 7])
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    """
     if len(features) < 2:
         return features
 
@@ -50,7 +70,12 @@ def merge_sort(features: list[BedLine]) -> list[BedLine]:
     )
 
 
-def sort_feature(features: list[BedLine]) -> list[BedLine]:
+def sort_feature(features: list[T]) -> list[T]:
+    """
+    This function only calls merge_sort function.
+    It will sort the features based on the first column.
+    If the first column is the same, it will sort based on the next column.
+    """
     return merge_sort(features)
 
 

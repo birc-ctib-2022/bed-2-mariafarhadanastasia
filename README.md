@@ -94,7 +94,10 @@ In our lower_bound binary search, we try to find the index of the number we are 
                   mid = (last + first) // 2
                   
                   if mid == 0: # 3
-                     return mid       
+                     if arr[mid] >= v:
+                        return mid
+                     else:
+                        return mid + 1      
 
                   if arr[mid] >= v: # 4
                      # 5
@@ -113,7 +116,7 @@ We will go through the code one by one. I put the number so it can be easier to 
 
 1. Base case: if the largest number in the array is smaller than integer we are looking for.
 2. We will run the code below if the last index is equal or larger than the first index. 
-3. We end up in this condition if we already reach the very left of array, where last = first = 0.
+3. We end up in this condition if we already reach the very left of array, where last = first = 0. If the value in that index is equal or larger than the number we are looking for, we return 0, otherwise we return 1.
 4. Otherwise, we do the binary search. We check if value in the mid index, is the same or larger than the number we search.
 5. If yes, then we check if the value in the index before the mid is smaller than the number we search. `This part is where it differs from the normal binary search.`
 6. If it also yes, this mid index is indeed the lower bound of the number we are looking for.

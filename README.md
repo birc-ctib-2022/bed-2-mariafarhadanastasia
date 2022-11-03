@@ -132,4 +132,4 @@ And the same thing for merging.
 *We wrote a tool for merging two BED files, but what if we had a bunch of them? What would the complexity be if we merged them in, one at a time? What would the complexity be if we merged all of the files at the same time?*
 
 The complexity of the merge we have made is O(n+m), where n and m are the lenghts of the two files we need to merge. This is because we need to go through each feature individually. If we were to merge more than two files one by one, it would just be O(n+m+o+p....) where the letters are the lenghts of the files for however many files we want to merge.
- If the lists are merged at the same time, more comparisons have to happen at each step in the loop.
+ ??If the lists are merged at the same time, more comparisons have to happen at each step in the loop.???

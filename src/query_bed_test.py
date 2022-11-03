@@ -96,6 +96,18 @@ def test_extracting_features_from_BEDtable():
 
     assert extract_region(bedtable.get_chrom("chrom20"), 500, 510) == [BedLine("chrom20", 506, 507, "qax")]
 
+def test_error_in_project_test(capsys):
+    query = "chrom4	3	280"
+    chrom, start, end = query.split()
+    features = read_bed_file(StringIO("chrom3\t999\t1000\tFeature-182\nchrom4\t1\t2\tFeature-185\nchrom4\t11\t12\tFeature-623\nchrom4\t17\t18\tFeature-875\nchrom4\t21\t22\tFeature-481\n"))
+
+    region = extract_region(features.get_chrom(chrom),int(start),int(end))
+    for line in region:
+        print_line(line, sys.stdout)
+    out, err = capsys.readouterr()
+    assert out == "chrom4\t11\t12\tFeature-623\nchrom4\t17\t18\tFeature-875\nchrom4\t21\t22\tFeature-481\n"
+    assert err == ""
+
 def test_print_lines_correctly(capsys):
     """
     Tests that the lines that are printed to the output file (og stdout) in the end is printed in the correct format

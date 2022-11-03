@@ -27,6 +27,8 @@ def lower_bound(x: list[int], v: int) -> int:
     7
     >>> lower_bound([0, 1, 2, 2, 3, 4, 4, 6], 7)
     8
+    >>> lower_bound([1, 11, 17, 21, 22], 3)
+    1
     """
     def search(arr, v, first, last):
         if v > arr[last]:
@@ -35,7 +37,10 @@ def lower_bound(x: list[int], v: int) -> int:
         if last >= first:
             mid = (last + first) // 2
             if mid == 0:
-                return mid
+                if arr[mid] >= v:
+                    return mid
+                else:
+                    return mid+1
 
             if arr[mid] >= v:
                 if arr[mid - 1] < v:

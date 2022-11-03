@@ -1,14 +1,12 @@
 """Tool for cleaning up a BED file."""
 
-import argparse
-from ast import iter_fields  # we use this module for option parsing. See main for details.
+import argparse  # we use this module for option parsing. See main for details.
 
 import sys
 from bed import (
     read_bed_file, print_line, BedLine
 )
-from bounds import lower_bound
-from bounds import upper_bound
+from bounds import (lower_bound, upper_bound)
 
 
 def extract_region(features: list[BedLine],
@@ -61,6 +59,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-
-
-

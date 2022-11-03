@@ -121,6 +121,16 @@ We will go through the code one by one. I put the number so it can be easier to 
 8. If the value in mid index we found is smaller than what we are looking for, so it must be in the right side of our mid index.
 
 *Would anything be more difficult if the features covered ranges instead of single nucleotides (like real BED files)? What could go wrong, if anything?*
+We are looking at the chrom_start for the features. This would ot change if the features wasn't SNPs. 
+All features with start within a certain region was extracted, and this would still be possible even if the features wasn't SNPs. 
+If we want the entire feature to be within the range given by the query file we would have to change the extract_features to include the end-position. 
+
+If the features wasn't SNPs we would also have to account for how we wanted them sorted if several features has the same start but different lengths. 
+The obvius would be to sort them with the shortest/them with the lowest chrom_end first. But we would have to include this in the code. 
+And the same thing for merging. 
 
 *We wrote a tool for merging two BED files, but what if we had a bunch of them? What would the complexity be if we merged them in, one at a time? What would the complexity be if we merged all of the files at the same time?*
 
+ The complexity of the merge we have made is O(n log n), because n comparisons are made in the first loop, where the chromosome numbers are compared and sorted for the two lists. In the inner loop, the chr_start of a feature is compared with the next feature from the other list, only if it has the same chromosome. Therefore log n comparisons will happen here.
+ If many lists are merged one at a time, the complexity would be O(kn log n), if k was the number of list. 
+ If the lists are merged at the same time, more comparisons have to happen at each step in the loop. Instead of comparing two numbers, k numbers have to be compared, so that would be (kn k log n).

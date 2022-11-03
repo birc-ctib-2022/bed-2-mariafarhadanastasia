@@ -36,6 +36,7 @@ def lower_bound(x: list[int], v: int) -> int:
 
         if last >= first:
             mid = (last + first) // 2
+
             if mid == 0:
                 if arr[mid] >= v:
                     return mid
@@ -43,11 +44,11 @@ def lower_bound(x: list[int], v: int) -> int:
                     return mid+1
 
             if arr[mid] >= v:
-                if arr[mid - 1] < v:
-                    return mid
-                else:
+                if arr[mid - 1] < v: 
+                    return mid # We find the lower bound!
+                else: # arr[mid - 1] >= v
                     return search(arr, v, first, mid - 1) 
-            else:
+            else: # arr[mid] < v
                 return search(arr, v, mid + 1, last)
 
     first = 0
@@ -89,10 +90,10 @@ def upper_bound(x: list[int], v: int) -> int:
 
             if arr[mid] > v:
                 if arr[mid - 1] <= v:
-                    return mid
-                else:
+                    return mid # We find the upper bound!
+                else: # arr[mid - 1] > v
                     return search(arr, v, first, mid - 1)
-            else:
+            else: # arr[mid] <= v
                 return search(arr, v, mid + 1, last)
 
     first = 0

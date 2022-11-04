@@ -51,4 +51,3 @@ def merge_3_atonce(x: list[int], y:list[int], z:list[int]) -> list[int]:
     else:
         result.append(merge_2(x[i:], y[j:]))
     return result
-    return

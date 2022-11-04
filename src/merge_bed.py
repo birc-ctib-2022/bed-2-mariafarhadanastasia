@@ -32,6 +32,28 @@ def read_bed_file(f: TextIO) -> list[BedLine]:
 def merge(f1: list[BedLine], f2: list[BedLine], outfile: TextIO) -> None:
     """Merge features and write them to outfile."""
     # FIXME: I have work to do here!
+    result = []
+    i, j = 0, 0 
+    while i < len(f1) and j < len(f2):
+        feature1 = f1[i]
+        feature2 = f2[j]
+        if feature1.chrom < feature2.chrom:
+            print_line(feature1, outfile)
+            i += 1
+        elif feature2.chrom < feature1.chrom:
+            print_line(feature2, outfile)
+            j += 1
+        else:
+            if feature1.chrom_start < feature2.chrom_start:
+                print_line(feature1, outfile)
+                i += 1
+            else:
+                print_line(feature2, outfile)
+                j += 1
+    for line in f1[i:]:
+        print_line(line, outfile)
+    for line in f2[j:]:
+        print_line(line, outfile)
 
 
 def main() -> None:

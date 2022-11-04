@@ -60,7 +60,83 @@ Once you have implemented a lower bound search for the start of the range, imple
 
 *How do you use binary search to find the lower bound of a number? How did you have to modify the binary search algorithm?*
 
+This code below is a basic binary search:
+
+      def binary_search(arr, x, first, last):
+      
+         # Check base case
+         if last >= first:
+      
+            mid = (last + first) // 2
+      
+            # If element is present at the middle itself
+            if arr[mid] == x:
+                  return mid
+      
+            # If element is smaller than mid, then it can only
+            # be present in left subarray
+            elif arr[mid] > x:
+                  return binary_search(arr, x, first, mid - 1)
+      
+            # Else the element can only be present in right subarray
+            else:
+                  return binary_search(arr, x, mid + 1, last)
+It will return the index where we first find the number we are looking for, even if we have several same numbers.
+
+In our lower_bound binary search, we try to find the index of the number we are looking for which located in the very left, where we assume that the array is already sorted.
+
+      def lower_bound(x, v):
+         def search(arr, v, first, last):
+            if v > arr[last]: # 1
+                  return len(arr)
+
+            if last >= first: # 2
+                  mid = (last + first) // 2
+                  
+                  if mid == 0: # 3
+                     if arr[mid] >= v:
+                        return mid
+                     else:
+                        return mid + 1      
+
+                  if arr[mid] >= v: # 4
+                     # 5
+                     if arr[mid - 1] < v: # 6
+                        return mid
+                     else: # 7
+                        return search(arr, v, first, mid - 1) 
+                  else: # 8
+                     return search(arr, v, mid + 1, last)
+
+         first = 0
+         last = len(x) - 1
+         return search(x, v, first, last)
+
+We will go through the code one by one. I put the number so it can be easier to read.
+
+1. Base case: if the largest number in the array is smaller than integer we are looking for.
+2. We will run the code below if the last index is equal or larger than the first index. 
+3. We end up in this condition if we already reach the very left of array, where last = first = 0. If the value in that index is equal or larger than the number we are looking for, we return 0, otherwise we return 1.
+4. Otherwise, we do the binary search. We check if value in the mid index, is the same or larger than the number we search.
+5. If yes, then we check if the value in the index before the mid is smaller than the number we search. `This part is where it differs from the normal binary search.`
+6. If it also yes, this mid index is indeed the lower bound of the number we are looking for.
+7. Otherwise, we will continue doing a binary search in the  left part of mid index
+8. If the value in mid index we found is smaller than what we are looking for, so it must be in the right side of our mid index.
+
 *Would anything be more difficult if the features covered ranges instead of single nucleotides (like real BED files)? What could go wrong, if anything?*
+We are looking at the chrom_start for the features. This would ot change if the features wasn't SNPs. 
+All features with start within a certain region was extracted, and this would still be possible even if the features wasn't SNPs. 
+If we want the entire feature to be within the range given by the query file we would have to change the extract_features to include the end-position. 
+
+If the features wasn't SNPs we would also have to account for how we wanted them sorted if several features has the same start but different lengths. 
+The obvius would be to sort them with the shortest/them with the lowest chrom_end first. But we would have to include this in the code. 
+And the same thing for merging. 
 
 *We wrote a tool for merging two BED files, but what if we had a bunch of them? What would the complexity be if we merged them in, one at a time? What would the complexity be if we merged all of the files at the same time?*
 
+The complexity of the merge we have made is O(n+m), where n and m are the lenghts of the two files we need to merge. This is because we need to go through each feature individually and copy it to a new merged list. 
+If we were to merge more than two files one by one, it would just be O(n+m+o+p....) where the letters are the lenghts of the files for however many files we want to merge. 
+If we merge lists with lengths n, m and o would the complexity be O(n+m) for the merge of the two first list and O(n+m+o), which boils down to O(n+m+o) (linear time)
+If we merged three lists at one it would still happen in linear time O(n+m+o). 
+Even tough the complexity is the same for both methods every element of the first two lists will be copied twice with the first method and only once for the second method. 
+The number of comparisons on the other hand will be higher for the second method.

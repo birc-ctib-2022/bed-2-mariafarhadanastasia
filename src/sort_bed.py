@@ -3,10 +3,13 @@
 import argparse  # we use this module for option parsing. See main for details.
 
 import sys
-from typing import TextIO
+from typing import TextIO, TypeVar
 from bed import (
-    read_bed_file, print_line, Table
+    BedLine, read_bed_file, print_line, Table
 )
+
+
+T = TypeVar('T')
 
 
 def sort_file(table: Table) -> None:
@@ -14,9 +17,66 @@ def sort_file(table: Table) -> None:
     for chrom, features in table.items():
         # Here we iterate through all the chromosomes in the file.
         # You need to sort `features` with respect to chrom_start
-        # and then updatte the table
+        # and then update the table
         # FIXME: sort `features`
-        table[chrom] = features  # features should be sorted here
+        table[chrom] = sort_feature(features)  # features should be sorted here
+
+
+def merge(left: list[T], right: list[T]) -> list[T]:
+    """
+    This function will merge two lists.
+
+    >>> merge([3], [2])
+    [2, 3]
+    >>> merge([9, 8, 7], [5, 4, 3, 2, 1])
+    [5, 4, 3, 2, 1, 9, 8, 7]
+    """
+    i, j = 0, 0
+    out = []
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            out.append(left[i])
+            i += 1
+        else:
+            out.append(right[j])
+            j += 1
+
+    out += left[i:]
+    out += right[j:]
+
+    return out
+
+
+def merge_sort(features: list[T]) -> list[T]:
+    """
+    This function will sort a list utilizing merge function.
+
+    >>> merge_sort([5, 4, 3, 2, 1])
+    [1, 2, 3, 4, 5]
+    >>> merge_sort([9, 8])
+    [8, 9]
+    >>> merge_sort([5, 4, 10, 2, 1, 9, 6, 8, 3, 7])
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    """
+    if len(features) < 2:
+        return features
+
+    mid = len(features) // 2
+
+    return merge(
+        left = merge_sort(features[:mid]),
+        right = merge_sort(features[mid:])
+    )
+
+
+def sort_feature(features: list[T]) -> list[T]:
+    """
+    This function only calls merge_sort function.
+    It will sort the features based on the first column.
+    If the first column is the same, it will sort based on the next column.
+    """
+    return merge_sort(features)
 
 
 def print_file(table: Table, outfile: TextIO) -> None:

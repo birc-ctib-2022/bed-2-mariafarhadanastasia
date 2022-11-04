@@ -6,12 +6,25 @@ import sys
 from bed import (
     read_bed_file, print_line, BedLine
 )
+from bounds import (lower_bound, upper_bound)
 
 
 def extract_region(features: list[BedLine],
                    start: int, end: int) -> list[BedLine]:
-    """Extract region chrom[start:end] and write it to outfile."""
-    return []  # FIXME: We want the actual region, not an empty list!
+    """Extract region chrom[start:end] and write it to outfile.
+    """
+    chr_list=[]
+    output=[]
+    if features==[]:
+        return []
+    for BedLine in features:
+        chr_list.append(BedLine.chrom_start)
+    low_bound=lower_bound(chr_list, start)
+    up_bound=lower_bound(chr_list,end)
+    output.extend(features[low_bound:up_bound])
+    return output
+
+
 
 
 def main() -> None:
